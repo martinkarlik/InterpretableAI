@@ -24,7 +24,7 @@ import numpy as np
 from time import time
 from keras import optimizers, callbacks
 from timeit import default_timer as timer
-from dataset import get_dataset_reshaped, split_dataset, get_resphaped_dataset_paper, get_cb513
+from dataset import get_dataset_reshaped, split_dataset, get_resphaped_dataset_paper, get_cb513, is_filtered
 import model
 
 import pickle
