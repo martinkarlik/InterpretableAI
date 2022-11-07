@@ -46,14 +46,29 @@ print("\n\nTime elapsed getting Dataset: " + "{0:.2f}".format((end_time - start_
 net = model.CNN_model()
 
 #load Weights
-net.load_weights("NewModelConvConv-best.hdf5")
+net.load_weights("Best Models/CullPDB6133-best - 0.721522.hdf5")
 
 scores = net.evaluate(X_test, Y_test)
-#print(scores)
+print(scores)
 print("Loss: " + str(scores[0]) + ", Accuracy: " + str(scores[1]) + ", MAE: " + str(scores[2]))
 
-CB_x, CB_y = get_cb513()
+predictions = net.predict(X_test)
+predictions_indices = np.argmax(predictions, axis=1)
 
-cb_scores = net.evaluate(CB_x, CB_y)
-print("CB513 -- Loss: " + str(cb_scores[0]) + ", Accuracy: " + str(cb_scores[1]) + ", MAE: " + str(cb_scores[2]))
+count_correct_helix = 0
+all_helixes = 0
+
+for i in np.arange(len(predictions_indices)):
+
+    is_helix = 2 <= np.argmax(Y_test[i]) <= 4
+    did_predict_helix = 2 <= predictions_indices[i] <= 4
+
+    if is_helix:
+        all_helixes += 1
+
+    if is_helix == did_predict_helix:
+        count_correct_helix += 1
+
+print("Accuracy of helix/no-helix classification: {:.2f}%".format(count_correct_helix / Y_test.shape[0] * 100))
+print("Ratio of helixes in dataset: {:.2f}%".format(all_helixes / Y_test.shape[0] * 100))
 
