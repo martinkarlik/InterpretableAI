@@ -11,17 +11,21 @@ import model
 
 import utils
 
+dataset = utils.get_alpha_helix_data()
+X_train, y_train, X_test, y_test, X_val, y_val = utils.split_dataset(dataset)
 
-data = utils.get_alpha_helix_data()
-
-X_train, X_val, X_test, Y_train, Y_val, Y_test = utils.split_data()
-
+# print(X_train.shape)
+# print(y_train.shape)
+# print(X_test.shape)
+# print(y_test.shape)
+# print(X_val.shape)
+# print(y_val.shape)
 
 net = model.CNN_model()
 
 start_time = timer()
 
-history = net.fit(X_train, Y_train, epochs=model.nn_epochs, batch_size=model.batch_dim, shuffle=True,
-                        validation_data=(X_val, Y_val), callbacks=[model.checkpoint])
+history = net.fit(X_train, y_train, epochs=model.nn_epochs, batch_size=model.batch_dim, shuffle=True,
+                        validation_data=(X_val, y_val), callbacks=[model.checkpoint])
 
 end_time = timer()
