@@ -39,7 +39,7 @@ batch_dim = 64
 nn_epochs = 35
 
 #loss = 'categorical_hinge' # ok
-loss = 'categorical_crossentropy' # best standart
+loss = 'binary_crossentropy' # best standart
 #loss = 'mean_absolute_error' # bad
 #loss = 'mean_squared_logarithmic_error' # new best (a little better)
 

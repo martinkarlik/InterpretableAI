@@ -5,7 +5,7 @@ Utils file with helper methods.
 sequence_len = 700
 total_features = 57
 amino_acid_residues = 21
-num_classes = 8
+num_classes_orig = 8
 
 cnn_width = 17
 
@@ -15,9 +15,9 @@ import numpy as np
 def get_dataset(path="dataset/cullpdb+profile_6133.npy"):
     dataset = np.load(path)
     dataset = np.reshape(dataset, (dataset.shape[0], sequence_len, total_features))
-    ret = np.zeros((dataset.shape[0], dataset.shape[1], amino_acid_residues + num_classes))
+    ret = np.zeros((dataset.shape[0], dataset.shape[1], amino_acid_residues + num_classes_orig))
     ret[:, :, :amino_acid_residues] = dataset[:, :, 35:56]
-    ret[:, :, amino_acid_residues:] = dataset[:, :, amino_acid_residues + 1:amino_acid_residues+ 1 + num_classes]
+    ret[:, :, amino_acid_residues:] = dataset[:, :, amino_acid_residues + 1:amino_acid_residues+ 1 + num_classes_orig]
     return ret
 
 
