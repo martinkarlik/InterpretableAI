@@ -11,15 +11,9 @@ import model
 
 import utils
 
-dataset = utils.get_alpha_helix_data()
-X_train, y_train, X_test, y_test, X_val, y_val = utils.split_dataset(dataset)
 
-# print(X_train.shape)
-# print(y_train.shape)
-# print(X_test.shape)
-# print(y_test.shape)
-# print(X_val.shape)
-# print(y_val.shape)
+X_train, y_train, X_test, y_test, X_val, y_val = utils.get_dataset_reshaped(seed=100)
+
 
 net = model.CNN_model()
 
