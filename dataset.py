@@ -28,7 +28,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 import os
 
-filtered = True
+filtered = False
 
 if filtered:
     dataset_path = "dataset/cullpdb+profile_6133_filtered.npy"
@@ -38,10 +38,9 @@ else:
 cb513_path = "dataset/cb513+profile_split1.npy"
 
 sequence_len = 700
-total_features = 57
+total_features = 51
 amino_acid_residues = 21
-num_classes = 8
-
+num_classes = 2
 cnn_width = 17
 
 ##
@@ -61,10 +60,31 @@ def is_filtered():
 ##
 def get_dataset(path="dataset/cullpdb+profile_6133.npy"):
     ds = np.load(path)
-    ds = np.reshape(ds, (ds.shape[0], sequence_len, total_features))
-    ret = np.zeros((ds.shape[0], ds.shape[1], amino_acid_residues + num_classes))
-    ret[:, :, 0:amino_acid_residues] = ds[:, :, 35:56]
-    ret[:, :, amino_acid_residues:] = ds[:, :, amino_acid_residues + 1:amino_acid_residues+ 1 + num_classes]
+    ds = np.reshape(ds, (ds.shape[0], sequence_len, 57))
+    tmpMatrix = np.zeros(((ds.shape[0], sequence_len, total_features)))
+    for i in range(len(tmpMatrix)):
+        if (i%1000 == 0):
+            print(i, '/ 6133')
+        for j in range(len(tmpMatrix[i])):
+            for k in range(len(tmpMatrix[i][j])):
+                if k < 22:
+                    tmpMatrix[i][j][k] = ds[i][j][k]
+                elif k == 22:
+                    if (ds[i][j][27] == 1):
+                        tmpMatrix[i][j][22] = 1
+                        tmpMatrix[i][j][23] = 0
+                    else:
+                        tmpMatrix[i][j][22] = 0
+                        tmpMatrix[i][j][23] = 1
+                elif k == 23:
+                     continue
+                else:
+                    tmpMatrix[i][j][k] = ds[i][j][k+6]
+
+    #ds = np.reshape(ds, (ds.shape[0], sequence_len, total_features))
+    ret = np.zeros((tmpMatrix.shape[0], tmpMatrix.shape[1], amino_acid_residues + num_classes))
+    ret[:, :, 0:amino_acid_residues] = tmpMatrix[:, :, 29:50]
+    ret[:, :, amino_acid_residues:] = tmpMatrix[:, :, amino_acid_residues + 1:amino_acid_residues+ 1 + num_classes]
     return ret
 
 ##
@@ -133,6 +153,8 @@ def get_dataset_reshaped(seed=None):
     Y_train = resphape_labels(Y_tr)
     Y_test = resphape_labels(Y_te)
     Y_validation = resphape_labels(Y_v)
+
+
     print(X_train.shape)
     print(Y_train.shape)
 
@@ -206,7 +228,7 @@ def get_cb513():
     X, Y = get_data_labels(CB)
     return reshape_data(X), resphape_labels(Y)
 
-
+# Shape (6133, 700, 50)
 if __name__ == '__main__':
     print("Collectiong dataset...")
     D = get_dataset()

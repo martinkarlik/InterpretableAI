@@ -46,6 +46,7 @@ else:
     X_train, X_val, X_test, Y_train, Y_val, Y_test = get_resphaped_dataset_paper()
 
 end_time = timer()
+
 print("\n\nTime elapsed getting Dataset: " + "{0:.2f}".format((end_time - start_time)) + " s")
 
 if filtered:
