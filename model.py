@@ -80,7 +80,7 @@ def CNN_model():
     m.add(Flatten())
     m.add(Dense(128, activation='relu'))
     m.add(Dense(32, activation='relu'))
-    m.add(Dense(dataset.num_classes, activation = 'softmax'))
+    m.add(Dense(1, activation = 'softmax'))
     opt = optimizers.Adam(lr=LR)
     m.compile(optimizer=opt,
               loss=loss,

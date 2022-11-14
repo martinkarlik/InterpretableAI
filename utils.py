@@ -12,16 +12,6 @@ cnn_width = 17
 import numpy as np
 
 
-# def get_dataset(path=None):
-#     data = np.load(path)
-#     data = data.reshape(5534, 700, 57)
-#
-#     transormed_data = np.zeros([5534, 700, 22])
-#     transormed_data[:, :, :21] = data[:, :, 35:56]
-#     transormed_data[:, :, 21] = data[:, :, 27]
-#
-#     return transormed_data
-
 def get_dataset(path="dataset/cullpdb+profile_6133.npy"):
     dataset = np.load(path)
     dataset = np.reshape(dataset, (dataset.shape[0], sequence_len, total_features))
@@ -62,7 +52,7 @@ def reshape_labels(labels):
 
 
 def reshape_for_alpha_helix_labels(labels):
-    return labels[:, 7]
+    return labels[:, 5]
 
 
 def get_dataset_reshaped(seed=100):
