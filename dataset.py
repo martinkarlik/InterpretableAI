@@ -124,8 +124,6 @@ def get_dataset_reshaped(seed=None):
     X_tr, Y_tr = get_data_labels(Train)
     X_v, Y_v = get_data_labels(Validation)
 
-    # print(X_tr.shape)
-    # print(Y_tr.shape)
     X_train = reshape_data(X_tr)
     X_test = reshape_data(X_te)
     X_validation = reshape_data(X_v)
@@ -133,8 +131,6 @@ def get_dataset_reshaped(seed=None):
     Y_train = resphape_labels(Y_tr)
     Y_test = resphape_labels(Y_te)
     Y_validation = resphape_labels(Y_v)
-    print(X_train.shape)
-    print(Y_train.shape)
 
     return X_train, X_validation, X_test, Y_train, Y_validation, Y_test
 

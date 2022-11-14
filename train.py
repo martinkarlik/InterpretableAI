@@ -14,7 +14,6 @@ import utils
 
 X_train, y_train, X_test, y_test, X_val, y_val = utils.get_dataset_reshaped(seed=100)
 
-
 net = model.CNN_model()
 
 start_time = timer()
