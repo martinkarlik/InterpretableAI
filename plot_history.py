@@ -23,6 +23,7 @@
 import pickle
 import matplotlib.pyplot as plt
 
+
 def plot_history(history):
     # summarize history for accuracy
     plt.plot(history.history['acc'])

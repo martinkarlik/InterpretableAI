@@ -70,7 +70,7 @@ def CNN_model():
     m.add(Dense(128, activation='relu'))
     m.add(Dense(32, activation='relu'))
     m.add(Dense(8, activation='relu'))
-    m.add(Dense(1, activation = 'softmax'))
+    m.add(Dense(1, activation='sigmoid'))
 
     m.compile(optimizer=opt,
               loss=loss,
