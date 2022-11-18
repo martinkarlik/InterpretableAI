@@ -31,7 +31,6 @@ start_time = timer()
 
 print("Collecting Dataset...")
 
-
 X_train, X_val, X_test, Y_train, Y_val, Y_test = get_dataset_reshaped(seed=100)
 
 end_time = timer()
@@ -40,7 +39,7 @@ print("\n\nTime elapsed getting Dataset: " + "{0:.2f}".format((end_time - start_
 net = model.CNN_model()
 
 #load Weights
-net.load_weights("best_models/CullPDB6133-best - 0.721522.hdf5")
+net.load_weights("best_models/our_best_model.hdf5")
 
 scores = net.evaluate(X_test, Y_test)
 print(scores)

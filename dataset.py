@@ -2,14 +2,13 @@
 Utils file with helper methods.
 """
 
+import numpy as np
+
 sequence_len = 700
 total_features = 57
 amino_acid_residues = 21
 num_classes_orig = 8
-
 cnn_width = 17
-
-import numpy as np
 
 
 def get_dataset(path="dataset/cullpdb+profile_6133.npy"):
@@ -33,7 +32,8 @@ def split_dataset(dataset, seed=None):
     return train, test, validation
 
 
-def reshape_data(X):
+def reshape_data(X, y):
+    # Reshape X
     padding = np.zeros((X.shape[0], X.shape[2], int(cnn_width/2)))
     X = np.dstack((padding, np.swapaxes(X, 1, 2), padding))
     X = np.swapaxes(X, 1, 2)
@@ -41,17 +41,26 @@ def reshape_data(X):
     for i in range(X.shape[1] - cnn_width + 1):
         res[:, i, :, :] = X[:, i:i+cnn_width, :]
     res = np.reshape(res, (X.shape[0]*(X.shape[1] - cnn_width + 1), cnn_width, amino_acid_residues))
-    res = res[np.count_nonzero(res, axis=(1, 2))>(int(cnn_width/2)*amino_acid_residues), :, :]
-    return res
+    X = res[np.count_nonzero(res, axis=(1, 2))>(int(cnn_width/2)*amino_acid_residues), :, :]
+
+    # Reshape y
+    y = np.reshape(y, (y.shape[0] * y.shape[1], y.shape[2]))
+    y = y[~np.all(y == 0, axis=1)]
+
+    return X, y
 
 
-def reshape_labels(labels):
-    Y = np.reshape(labels, (labels.shape[0]*labels.shape[1], labels.shape[2]))
-    Y = Y[~np.all(Y == 0, axis=1)]
-    return Y
+
+def get_helix_labels(labels):
+
+    relevant_labels = labels[:, 3:6]
+    reshaped_labels = np.zeros(relevant_labels.shape[0])
+    reshaped_labels = np.any(relevant_labels, axis=1, out=reshaped_labels)
+
+    return reshaped_labels
 
 
-def reshape_for_alpha_helix_labels(labels):
+def get_alpha_helix_labels(labels):
     return labels[:, 5]
 
 
@@ -64,16 +73,12 @@ def get_dataset_reshaped(seed=100):
     X_val, y_val = validation[:, :, :amino_acid_residues], validation[:, :, amino_acid_residues:]
 
     # Reshape data using the window width
-    X_train = reshape_data(X_train)
-    X_test = reshape_data(X_test)
-    X_val = reshape_data(X_val)
+    X_train, y_train = reshape_data(X_train, y_train)
+    X_test, y_test = reshape_data(X_test, y_test)
+    X_val, y_val = reshape_data(X_val, y_val)
 
-    y_train = reshape_labels(y_train)
-    y_test = reshape_labels(y_test)
-    y_val = reshape_labels(y_val)
-
-    y_train = reshape_for_alpha_helix_labels(y_train)
-    y_test = reshape_for_alpha_helix_labels(y_test)
-    y_val = reshape_for_alpha_helix_labels(y_val)
+    y_train = get_helix_labels(y_train)
+    y_test = get_helix_labels(y_test)
+    y_val = get_helix_labels(y_val)
 
     return X_train, y_train, X_test, y_test, X_val, y_val

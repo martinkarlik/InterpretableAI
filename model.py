@@ -31,30 +31,23 @@ import tensorflow as tf
 
 import dataset
 
-do_summary = True
+do_summary = False
 
-LR = 0.0009 # maybe after some (10-15) epochs reduce it to 0.0008-0.0007
+LR = 0.0009  # maybe after some (10-15) epochs reduce it to 0.0008-0.0007
 drop_out = 0.38
 batch_dim = 64
 nn_epochs = 35
 
-#loss = 'categorical_hinge' # ok
-loss = 'binary_crossentropy' # best standart
-#loss = 'mean_absolute_error' # bad
-#loss = 'mean_squared_logarithmic_error' # new best (a little better)
-
+loss = 'binary_crossentropy'
+opt = optimizers.Adam(lr=LR)
 
 early_stop = callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=1, verbose=0, mode='min')
 
 
-filepath="CullPDB_Filtered-best.hdf5"
+filepath = "our_best_model.hdf5"
 checkpoint = callbacks.ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
 
-##
-## @brief       Builds and returns the CNN model (Keras Sequential model). If do_summary, prints the model summary.
-##
-## @return      The CNN model.
-##
+
 def CNN_model():
     m = Sequential()
     m.add(Conv1D(128, 5, padding='same', activation='relu', input_shape=(dataset.cnn_width, dataset.amino_acid_residues)))
@@ -76,11 +69,13 @@ def CNN_model():
     m.add(Flatten())
     m.add(Dense(128, activation='relu'))
     m.add(Dense(32, activation='relu'))
+    m.add(Dense(8, activation='relu'))
     m.add(Dense(1, activation = 'softmax'))
-    opt = optimizers.Adam(lr=LR)
+
     m.compile(optimizer=opt,
               loss=loss,
               metrics=['accuracy', 'mae'])
+
     if do_summary:
         print("\nHyper Parameters\n")
         print("Learning Rate: " + str(LR))
