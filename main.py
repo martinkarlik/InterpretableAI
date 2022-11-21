@@ -1,21 +1,18 @@
-"""
-The training script.
-"""
 
-import numpy as np
-from time import time
-from keras import callbacks
-from timeit import default_timer as timer
+import keras
 import model
 import dataset
+from lime.lime_text import LimeTextExplainer
+
+# Some initial lime_text work (no data translation)
+
+net = model.CNN_model()
+net.load_weights('best_models/draft_model.h5')
+print(net)
 
 X_train, y_train, X_test, y_test, X_val, y_val = dataset.get_dataset_reshaped(seed=100)
-net = model.CNN_model()
+explainer = LimeTextExplainer(class_names=['1', '0'])
 
-start_time = timer()
-
-history = net.fit(X_train, y_train, epochs=model.nn_epochs, batch_size=model.batch_dim, shuffle=True,
-                        validation_data=(X_val, y_val), callbacks=[model.checkpoint])
-
-end_time = timer()
-print("\n\nTime elapsed training the model: " + "{0:.2f}".format((end_time - start_time)) + " s")
+idx = 5
+explanation = explainer.explain_instance("ABCDEFGHIJKLMNOPQ", net.predict, num_features=10, labels=(1,))
+print(explanation)
