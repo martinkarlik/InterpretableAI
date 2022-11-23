@@ -108,3 +108,4 @@ dataset/*.npy
 
 #logs
 logs/convconvnet
+Notebook_version_XAI.ipynb
