@@ -18,5 +18,5 @@ net = model.CNN_model()
 history = net.fit(X_train, y_train, epochs=model.nn_epochs, batch_size=model.batch_dim, shuffle=True,
                         validation_data=(X_val, y_val), callbacks=[model.checkpoint])
 
-net.save('best_models/alpha_helix.h5')
+net.save('best_models/new_model.h5')
 
