@@ -64,7 +64,27 @@ def get_alpha_helix_labels(labels):
     return labels[:, 5]
 
 
-def get_dataset_reshaped(seed=100):
+def get_helix_dataset(seed=100):
+    dataset = get_dataset('dataset/cullpdb+profile_6133_filtered.npy')
+    train, test, validation = split_dataset(dataset, seed)
+
+    X_train, y_train = train[:, :, :amino_acid_residues], train[:, :, amino_acid_residues:]
+    X_test, y_test = test[:, :, :amino_acid_residues], test[:, :, amino_acid_residues:]
+    X_val, y_val = validation[:, :, :amino_acid_residues], validation[:, :, amino_acid_residues:]
+
+    # Reshape data using the window width
+    X_train, y_train = reshape_data(X_train, y_train)
+    X_test, y_test = reshape_data(X_test, y_test)
+    X_val, y_val = reshape_data(X_val, y_val)
+
+    y_train = get_helix_labels(y_train)
+    y_test = get_helix_labels(y_test)
+    y_val = get_helix_labels(y_val)
+
+    return X_train, y_train, X_test, y_test, X_val, y_val
+
+
+def get_alpha_helix_dataset(seed=100):
     dataset = get_dataset('dataset/cullpdb+profile_6133_filtered.npy')
     train, test, validation = split_dataset(dataset, seed)
 
