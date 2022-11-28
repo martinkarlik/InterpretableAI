@@ -1,13 +1,10 @@
 
-import model
-
-
 class ModelWrapper:
 
-    def __init__(self):
-        self.model = model.CNN_model()
+    def __init__(self, model):
+        self.model = model
 
 
-    def predict_and_translate(self):
-        # Do trans
+    def translate_and_predict(self, instance):
+        # Do translation
         self.model.predict()
