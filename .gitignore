@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+HelixClassifier/dataset
 
 # C extensions
 *.so

@@ -33,8 +33,8 @@ import dataset
 
 do_summary = False
 
-LR = 0.0009  # maybe after some (10-15) epochs reduce it to 0.0008-0.0007
-drop_out = 0.38
+LR = 0.0009
+drop_out = 0.5
 batch_dim = 64
 nn_epochs = 10
 
@@ -42,30 +42,20 @@ loss = 'binary_crossentropy'
 opt = optimizers.Adam(lr=LR)
 
 early_stop = callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=1, verbose=0, mode='min')
-
-
-filepath = "our_best_model.hdf5"
-checkpoint = callbacks.ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
+checkpoint = callbacks.ModelCheckpoint(filepath='', monitor='val_acc', verbose=1, save_best_only=True, mode='max')
 
 
 def CNN_model():
     m = Sequential()
     m.add(Conv1D(128, 5, padding='same', activation='relu', input_shape=(dataset.cnn_width, dataset.amino_acid_residues)))
     m.add(BatchNormalization())
-    # m.add(MaxPooling1D(pool_size=2))
     m.add(Dropout(drop_out))
     m.add(Conv1D(128, 3, padding='same', activation='relu'))
     m.add(BatchNormalization())
-    # m.add(MaxPooling1D(pool_size=2))
     m.add(Dropout(drop_out))
     m.add(Conv1D(64, 3, padding='same', activation='relu'))
     m.add(BatchNormalization())
-    # m.add(MaxPooling1D(pool_size=2))
     m.add(Dropout(drop_out))
-    # m.add(Conv1D(32, 3, padding='same', activation='relu'))
-    # m.add(BatchNormalization())
-    # m.add(MaxPooling1D(pool_size=2))
-    # m.add(Dropout(drop_out))
     m.add(Flatten())
     m.add(Dense(128, activation='relu'))
     m.add(Dense(32, activation='relu'))
