@@ -97,8 +97,12 @@ def get_alpha_helix_dataset(seed=100):
     X_test, y_test = reshape_data(X_test, y_test)
     X_val, y_val = reshape_data(X_val, y_val)
 
+
+    print(X_train.shape)
     y_train = get_alpha_helix_labels(y_train)
     y_test = get_alpha_helix_labels(y_test)
     y_val = get_alpha_helix_labels(y_val)
 
+    print(X_val.shape)
+    print(X_test.shape)
     return X_train, y_train, X_test, y_test, X_val, y_val

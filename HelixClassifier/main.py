@@ -5,7 +5,7 @@ The training script.
 import model
 import dataset
 
-should_consider_all_helixes = True
+should_consider_all_helixes = False
 
 if should_consider_all_helixes:
     X_train, y_train, X_test, y_test, X_val, y_val = dataset.get_helix_dataset(seed=100)
