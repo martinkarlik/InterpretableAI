@@ -5,7 +5,7 @@ The training script.
 import model
 import dataset
 
-should_consider_all_helixes = False
+should_consider_all_helixes = True
 
 if should_consider_all_helixes:
     X_train, y_train, X_test, y_test, X_val, y_val = dataset.get_helix_dataset(seed=100)
@@ -16,7 +16,7 @@ else:
 net = model.CNN_model()
 
 history = net.fit(X_train, y_train, epochs=model.nn_epochs, batch_size=model.batch_dim, shuffle=True,
-                        validation_data=(X_val, y_val), callbacks=[model.checkpoint, model.early_stop])
+                        validation_data=(X_val, y_val), callbacks=[model.checkpoint, model.early_stop, model.logger])
 
-net.save('best_models/alpha_helix_0.9187.h5')
+net.save('best_models/new_model.h5')
 

@@ -26,10 +26,9 @@ from keras.models import Sequential
 from keras.layers import Dense, Activation, Dropout, Conv1D, AveragePooling1D, MaxPooling1D, TimeDistributed, LeakyReLU, BatchNormalization, Flatten
 from keras import optimizers, callbacks
 from keras.regularizers import l2
-# import keras.backend as K
 import tensorflow as tf
-
 import dataset
+import datetime
 
 do_summary = False
 
@@ -41,8 +40,11 @@ nn_epochs = 10
 loss = 'binary_crossentropy'
 opt = optimizers.Adam(lr=LR)
 
-early_stop = callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=1, verbose=0, mode='min')
+early_stop = callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=5, verbose=0, mode='min')
 checkpoint = callbacks.ModelCheckpoint(filepath='', monitor='val_acc', verbose=1, save_best_only=True, mode='max')
+
+log_dir = "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+logger = callbacks.TensorBoard(log_dir=log_dir, histogram_freq=0, write_graph=True)
 
 
 def CNN_model():
