@@ -35,7 +35,7 @@ do_summary = False
 LR = 0.0009
 drop_out = 0.5
 batch_dim = 64
-nn_epochs = 10
+nn_epochs = 5
 
 loss = 'binary_crossentropy'
 opt = optimizers.Adam(lr=LR)

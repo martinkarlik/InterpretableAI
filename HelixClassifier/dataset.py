@@ -8,7 +8,7 @@ sequence_len = 700
 total_features = 57
 amino_acid_residues = 21
 num_classes_orig = 8
-cnn_width = 17
+cnn_width = 25
 
 
 def get_dataset(path="dataset/cullpdb+profile_6133.npy"):
